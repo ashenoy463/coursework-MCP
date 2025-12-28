@@ -5,7 +5,7 @@
 *.x
 *.dat
 *.png
-*.pdf
+#*.pdf
 *.eps
 *.svg
 
