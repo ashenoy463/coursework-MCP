@@ -1,0 +1,91 @@
+\begin{Large}
+    \textsf{\textbf{Question 3}}
+\end{Large}
+
+\vspace{2em}
+
+We are tasked with evaluating the expectation value of the Coulomb interaction in the ground state of the Helium atom, expressed in spherical polar coordinates: 
+% \huge\langle \frac{1}{\abs{\Vec{r}_1 - \Vec{r}_2}} \LARGE\rangle
+
+$$
+    I = \int_{r_1=0}^{\infty} \int_{r_2=0}^{\infty} \int_{\theta_1=0}^{\pi} \int_{\theta_2=0}^{\pi} \int_{\phi_1=0}^{2\pi} \int_{\phi_2=0}^{2\pi} r_1^2 e^{-4r_1} r_2^2 e^{-4r_2} \sin{\theta_1}\sin{\theta_2}\frac{1}{\sqrt{r_1^2 + r_2^2 - 2 r_1 r_2 \cos\beta}} dr_1 dr_2d\theta_1 d\theta_2 d\phi_1 d\phi_2
+$$
+
+where 
+
+$$
+    \cos{\beta} = \cos{\theta_1} + \cos{\theta_2} + \sin{\theta_1}\sin{\theta_2}\cos{(\phi_1 - \phi_2)}
+$$
+
+We note that the integral has a sharp inverse exponential dependence on $r_1$ and $r_2$, making exponential sampling desirable for the radial co-ordinates. For the angular co-ordinates, we use uniform sampling over their domain.
+
+To sample from the exponential distribution, we use the Inverse-CDF method. Consider the PDF
+
+$$ 
+f_X (x) =
+\begin{dcases} 
+    4e^{-4x}     & x \ge 0  \\
+    0           & \text{otherwise} 
+\end{dcases}
+$$
+
+The corresponding CDF is
+
+$$ 
+F_X (x) =
+\begin{dcases} 
+    1 - e^{-4x}     & x \ge 0  \\
+    0           & \text{otherwise} 
+\end{dcases}
+$$
+
+The inverse CDF in terms of a uniformly distributed random variable $Y$ is then
+
+
+$$ 
+F^{-1}_Y (y) =
+\begin{dcases} 
+    -\frac{1}{4}\ln{(1-y)}     & 0 \le y \le 1   \\
+    0           & \text{otherwise} 
+\end{dcases}
+$$
+
+Since all the random variables are independent of each other, the joint PDF is simply the product of the individual PDFs:
+
+$$
+f(r_1,r_2,\theta_1,\theta_2,\phi_1,\phi_2) =  \frac{4}{\pi^4} e^{-4(r_1 + r_2)}
+$$
+
+Define 
+
+$$
+g(r_1,r_2,\theta_1,\theta_2,\phi_1,\phi_2) =  \frac{r_1^2 r_2^2 \sin{\theta_1}\sin{\theta_2}}{\sqrt{r_1^2 + r_2^2 - 2 r_1 r_2 \cos\beta}}
+$$
+
+The integral is then (with aforementioned limits implied)
+
+\begin{align*}
+    I &= \frac{\pi^4}{4}\int f(r_1,r_2,\theta_1,\theta_2, \phi_1,\phi_2) g(r_1,r_2,\theta_1,\theta_2,\phi_1,\phi_2) dr_1 dr_2d\theta_1 d\theta_2 d\phi_1 d\phi_2  \\
+      &= \frac{\pi^4}{4} \langle g\rangle
+\end{align*}
+
+
+
+
+\newpage
+
+\header{Code:}
+
+\small\texttt{\verbatiminput{code/correl.f90}}
+
+\newpage
+
+\header{Output:}
+
+\small\texttt{\verbatiminput{io/correl.out}}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=1.0\linewidth]{diag/error.png}
+    \caption{Error Analysis}
+\end{figure}

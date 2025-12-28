@@ -1,0 +1,76 @@
+\begin{Large}
+    \textsf{\textbf{Program 1 - Gaussian Integral Estimation}}
+\end{Large}
+
+\vspace{2em}
+
+\header{Aim:} To estimate the integral $\int_{-\infty}^{+\infty}dx\ e^{-\alpha x^2}$ by the Trapezoidal method to a given precision (by calculating the truncation error from the analytical value) as well as through adaptive subintervals\\
+
+% The analytical solution for the Gaussian integral (convergent for $\alpha > 0$) is
+% \begin{align*}
+%     I(a) &= \int_{-\infty}^{+\infty}dx\ e^{-\alpha x^2}\\
+%          &= \frac{1}{\sqrt{a}} \int_0^\infty du\ u^{-1/2}e^{-u}         &\text{--- } u = \alpha x^2\\
+%          & = \sqrt{\frac{\pi}{\alpha}}
+% \end{align*}
+
+We will numerically compute the integral $\int_0^\infty \exp(-\alpha x^2)$. As we necessarily have to set some finite upper limit in numerics, there are two sources of error in the obtained result: one from the truncation of the upper limit and the truncation error of the numerical method itself.
+
+To eliminate the former, we choose the upper limit of $4/\sqrt{2\alpha}$ corresponding to a coverage of $8\sigma$ in the full integral. As for the latter, know that for a function $f(x)$ integrated over the interval $[a,b]$ with step-size $h$ using the trapezoidal method, the truncation error is given by 
+
+$$
+E_T \leq \frac{(b-a)}{12}h^2 \times \text{max}|f^{\prime\prime}(x)|
+$$
+
+Analytically for the gaussian with as seen in the below figure, the absolute value of the second derivative attains its maximum at $x=2\alpha$, hence
+
+$$
+    E_T &\leq \frac{\sqrt{2\alpha}}{3} h^2 \\
+$$
+
+If $\delta$ is the maximum amount of error we are willing to tolerate, we may choose any $h$ such that 
+
+$$
+    h^2 &\leq \frac{3\delta}{\sqrt{2\alpha}} \\
+$$
+
+
+\begin{figure}[!htb]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+      axis x line=middle, axis y line=middle,
+      ymin=-3, ymax=2, ytick={-5,...,5}, ylabel=$y$,
+      xmin=-5, xmax=5, xtick=none, xlabel=$x$,
+      ytick={-2},
+      yticklabels={$-2\alpha$},
+    ]
+    \addplot[blue, domain=-5:5, smooth]{(4*(x^2)*(e^(-x^2))-2*(e^(-x^2)))};
+    \end{axis}
+    \end{tikzpicture} 
+    \caption{$f^{\prime\prime}(x) = 4{\alpha^2}{x^2}e^{-\alpha x^2}-2\alpha e^{-\alpha x^2}$ for $\alpha=1$}}
+\end{figure}
+
+\newpage
+
+\small\texttt{\verbatiminput{code/1_gaussinteg.f90}}
+
+\newpage
+
+\header{Flowchart:}
+
+% \begin{figure}[!htb]
+%     \centering
+%     \begin{tikzpicture}[node distance=2cm]
+%         \node (start) [startstop] {Start};
+%     \end{tikzpicture}
+% \end{figure}
+
+\newpage
+
+\header{Input:}
+
+\small\texttt{\verbatiminput{io/ginteg.in}}
+
+\header{Output:}
+
+\small\texttt{\verbatiminput{io/ginteg.out}}

@@ -1,0 +1,41 @@
+\begin{Large}
+    \textsf{\textbf{Program 5 - Box-Muller Transformation}}
+\end{Large}
+
+\vspace{2em}
+
+\header{Aim:} To sample two uniformly distributed random variables and calculate their Box-Muller transform, verifying that the result is normally distributed.\\
+
+
+The Box-Muller transform of two uniformly distributed random variables $u$ and $v$ is given by
+
+\begin{align*}
+    x(u,v) &= \cos({2\pi v})\sqrt{-2 \ln u} \\
+    y(u,v) &= \sin({2\pi v})\sqrt{-2 \ln u} 
+\end{align*}
+
+\newpage
+
+\header{Flowchart:}
+
+% \begin{figure}[!htb]
+%     \centering
+%     \begin{tikzpicture}[node distance=2cm]
+%         \node (start) [startstop] {Start};
+%     \end{tikzpicture}
+% \end{figure}
+
+\newpage
+
+\small\texttt{\verbatiminput{code/5_boxmuller.f90}}
+
+\newpage
+
+\header{Output:}
+
+\begin{figure*}[!htb]
+    \centering
+    \includegraphics[width=1.0\linewidth]{diag/bm_100000.png}
+    \caption{Histogram of $n=10000$ Box-Muller transformed variables}
+    \label{fig:placeholder}
+\end{figure*}

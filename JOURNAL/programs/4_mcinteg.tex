@@ -1,0 +1,70 @@
+\begin{Large}
+    \textsf{\textbf{Program 4 - Gaussian Integral by Monte Carlo Integration}}
+\end{Large}
+
+\vspace{2em}
+
+\header{Aim:} To estimate the value of a gaussian integral to within a given precision using uniform-sample Monte Carlo integration along with ensemble-averaging\\
+
+Consider an integral that is perhaps analytically intractable:
+
+$$
+    I = \int_a^b dx\ f(x)
+$$
+
+The general Monte-Carlo integration problem is to write $I$ in the form
+
+$$
+    I = \int_a^b dx\ g(x)h(x)dx
+$$
+
+where is a probablity distribution $g(x)$ we have an efficient method to sample from. We can then note that the integral we wish to solve is simply the expectation value of the function $h(X)$ where $X$ is distributed as $g(x)$. This expectation value can now be estimated by drawing say $N$ samples $\xi_i$ from $g(x)$, thus yielding
+
+$$ 
+    I = \langle h \rangle \approx \frac{1}{N} \sum_{i=1}^N h(\xi_i)
+$$
+
+In our case we wish to solve the integral
+
+$$
+    I_\alpha = \int_0^t dx\ e^{-\alpha x^2}
+$$
+
+Applying the above procedure, we can insert a uniform distribution (scaled from $0$ to $t$), $U(x)= 1/t$ and obtain
+
+$$
+    I = \frac{t}{N}\sum_{i=1}^N e^{-\alpha \xi_i ^2}
+$$
+
+To compute the error in estimation, we note that the well-tabulated error-function is given by
+
+\begin{align*}
+    \text{erf}(t) &= \frac{2}{\sqrt{\pi}} \int_0^t dx\ e^{-\alpha x^2} \\
+    \implies I_{\alpha} &= \sqrt{\frac{\pi}{4\alpha}} \text{erf}(t) 
+\end{align*}
+
+\newpage
+
+\header{Flowchart:}
+
+
+% \begin{figure}[!htb]
+%     \centering
+%     \begin{tikzpicture}[node distance=2cm]
+%         \node (start) [startstop] {Start};
+%     \end{tikzpicture}
+% \end{figure}
+
+\newpage
+
+\small\texttt{\verbatiminput{code/4_mcinteg.f90}}
+
+\newpage
+
+\header{Input:}
+
+\small\texttt{\verbatiminput{io/mcinteg.in}}
+
+\header{Output:}
+
+\small\texttt{\verbatiminput{io/mcinteg.out}}

@@ -1,0 +1,70 @@
+\begin{Large}
+    \textsf{\textbf{Program 6 - Trapezoidal distribution}}
+\end{Large}
+
+\vspace{2em}
+
+\header{Aim:} To sample the given trapezium-shaped distribution by implementing the appropriate transformation of a uniformly distributed random variable.\\
+
+The given distribution is
+
+$$ t(x) =
+\begin{cases} 
+    (x-c)/ab          & c   \leq x \leq a+c \\
+    1/b               & a+c \leq x \leq b+c \\
+    (a+b+c-x)/ab      & b+c \leq x \leq a+b+c 
+\end{cases}
+$$
+
+\begin{figure}[!htb]
+    \centering
+    \input{diag/trap.tikz}
+\end{figure}
+
+By integration, the CDF is found to be
+
+$$ F_t(x) =
+\begin{dcases} 
+    \frac{x^2}{2ab} - \frac{c}{ab}x+\frac{c^2}{2ab}          & c   \leq x \leq a+c \\
+    \frac{a}{2b}+\frac{x}{b}-\frac{a+c}{b}               & a+c \leq x \leq b+c \\
+     1 - \frac{(a+b+c -x)^2}{2ab}     & b+c \leq x \leq a+b+c 
+\end{dcases}
+$$
+
+Given that we can efficiently sample a uniformly distributed random variable $Y$, our method is to find $F^{-1}_t(Y)$ which we know is distributed as $t(y)$. In our case we calculate analytically:
+
+$$ F_t^{-1}(Y) =
+\begin{dcases} 
+    c + \sqrt{2abY}          & 0   \leq x \leq \frac{a}{2b} \\
+    bY + \frac{a}{2} + c & \frac{a}{2b} \leq x \leq 1- \frac{a}{2b} \\
+    a+b+c - \sqrt{2ab(1-Y)}      & 1-\frac{a}{2b} \leq x \leq 1 
+\end{dcases}
+$$
+
+The above piecewise function of a uniformly distributed random variable is straightforwardly implemented in Fortran. As shown in the below diagram, it is distributed as desired. 
+
+\newpage
+
+\header{Flowchart:}
+
+% \begin{figure}[!htb]
+%     \centering
+%     \begin{tikzpicture}[node distance=2cm]
+%         \node (start) [startstop] {Start};
+%     \end{tikzpicture}
+% \end{figure}
+
+\newpage
+
+\small\texttt{\verbatiminput{code/6_trapdist.f90}}
+
+\newpage
+
+\header{Output:}
+
+\begin{figure*}[!htb]
+    \centering
+    \includegraphics[width=1.0\linewidth]{diag/trap_100000.png}
+    \caption{Histogram of $n=100000$ samples with $a=10$,$a=20$,$c=5$}
+    \label{fig:placeholder}
+\end{figure*}

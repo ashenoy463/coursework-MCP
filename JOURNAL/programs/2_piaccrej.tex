@@ -1,0 +1,57 @@
+\begin{Large}
+    \textsf{\textbf{Program 2 - Pi Estimation by Acceptance Rejection Method}}
+\end{Large}
+
+\vspace{2em}
+
+\header{Aim:} To estimate the value of $\pi$ to within a given precision using the acceptance-rejection method along with ensemble-averaging\\
+
+In this method, a variation of which was proposed by Laplace in 1812, we actually estimate the volume of a circle $\mathcal{C}$ inscribed within the square region $\mathcal{S} = [-1,+1]\times[-1,+1] \subset \mathbb{R}^2 $
+
+We sample two uniformly distributed numbers $x_i$, $y_i$, with the distribution scaled such that $x_i,y_i \in [-1,+1]\subset \mathbb{R}$. As the two samples are independent, we may regard a series of $N$ such pairs $(x_i,y_i)$ as uniformly distributed points in $\mathcal{S}$
+
+Given that the distribution of points is uniform, we have for a given sampled point $p$:
+
+\begin{align*}
+    \textbf{Prob}(p\in \mathcal{C}) &= \frac{\textbf{Area}(\mathcal{C})}{\textbf{Area}(\mathcal{S})} \\
+     &= \frac{\pi}{4}
+\end{align*}
+
+The probability in the above expression is estimated by the fraction of points out of $N$ that lie inside the circle. Thus we have
+
+$$ \pi = 4\times\frac{\text{no. of points inside \mathcal{C}}}{N}$$
+
+\begin{figure}[!htb]
+    \centering
+    \input{diag/accrej.tikz}
+    \caption{Diagrammatic representation of the acceptance-rejection method.}
+\end{figure}
+
+
+\newpage
+
+\header{Flowchart:}
+
+
+% \begin{figure}[!htb]
+%     \centering
+%     \begin{tikzpicture}[node distance=2cm]
+%         \node (start) [startstop] {Start};
+%     \end{tikzpicture}
+% \end{figure}
+
+\newpage
+
+\header{Program:}
+
+\small\texttt{\verbatiminput{code/2_piaccrej.f90}}
+
+\newpage
+
+\header{Input:}
+
+\small\texttt{\verbatiminput{io/pi_mc.in}}
+
+\header{Output:}
+
+\small\texttt{\verbatiminput{io/pi_mc.out}}

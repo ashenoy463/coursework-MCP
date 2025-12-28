@@ -1,0 +1,115 @@
+\begin{Large}
+    \textsf{\textbf{Program 7 - Ising Model}}
+\end{Large}
+
+\vspace{2em}
+
+\header{Aim:} To simulate the zero-field Ising model using the Metropolis-Hasting algorithm and calculate the energy, magnetization, magnetic susceptibility and specific heat as a function to temperature and lattice size.\\
+
+The Ising model is a mathematical model for a ferromagnetic material, defined by placing spins that can either point up or down on a lattice of finite size, say $L$. To overcome the necessarily finite size in simulation, periodic boundary conditions are imposed. The system is considered to be placed in equilibrium with a bath of temperature $T$.
+
+\vspace{2em}
+\begin{figure}[!htb]
+    \centering
+    \input{diag/ising.tikz}
+    \caption{A spin $s_i$ on the lattice and its nearest neighbours $s_j$}
+\end{figure}
+
+The Hamiltonian is defined to be
+
+$$
+    H = -J \sum_{\langle i,j \rangle}s_i s_j -G\sum_i s_i
+$$
+
+where the sum $\langle i j \rangle$ is over nearest neighbours as shown in the above diagram. $J$ represents the coupling strength between individual spins while $G$ represents the interaction of the spins with a honmogenous external magnetic field. Observables of interest are the total energy $E$, total magnetization $M$, as well as the magnetic susceptibility $\chi$ and heat capacity $C_V$:
+
+\begin{align*}
+    \chi    &= \langle M^2 \rangle - \langle M \rangle^2 \\
+    C_V     &= \langle E^2 \rangle - \langle E \rangle^2
+\end{align*}    
+
+As the system is liable to exhibit thermal fluctuations, we must calculate ensemble averages of the above observables. However owing to the large ($2^{L^2}$) number of configurations, this is not viable. Hence we resort to Monte Carlo techniques, sampling possible configurations in order to calculate the averages.
+
+As the system is in equilibrium with a heat-bath we expect the configurations to follow Boltzman statistics. We use the Metropolis method to generate a finite of configurations that are representative of the entire phase space, thus yielding the correct ensemble averages. This is done using Markov chains.
+
+The master equation for a Markov process is
+
+$$
+    \rho(X,t+1) - \rho(X,t) = - \sum_{X^\prime} T(X\rightarrow X^\prime)\rho(X,t) + \sum_{X^\prime} T(X^\prime \rightarrow X)\rho(X^\prime,t)
+$$
+
+We are interested in the stationary distribution $\rho(X)$ for which the left side vanishes. One possible solution is the detailed balance condition where in the long run the rates of both opposing processes become equal:
+$$
+    \frac{T(X\rightarrow X^\prime)}{T(X^\prime \rightarrow X)} = \frac{\rho(X,t)}{\rho(X^\prime,t)}
+$$
+
+We the write the transition probabilities in the form
+
+$$
+    T(X \rightarrow X^\prime) = A_{X X^\prime} \omega_{X X^\prime}
+$$
+
+where $ 0\leq \omega_{X X^\prime} \leq 1$, $\sum_{X}\sum_{X^\prime} \omega_{X X^\prime} = 1$, and $\omega_{X X^\prime} = \omega_{X^\prime X}$
+
+We then have 
+
+$$
+    \frac{A_{X X^\prime}}{A_{X^\prime X}} = \frac{\rho (X^\prime)}{\rho(X)}
+$$
+
+Our targetted stationary distribution is the Boltzmann distribution, so
+
+\begin{align*}
+\frac{\rho(X^\prime)}{\rho(X)} &= e^{-\beta(H[X^\prime] - H[X])} = e^{-\beta \Delta H}\\
+\implies \frac{A_{X X^\prime}}{A_{X^\prime X}} &= e^{-\beta \Delta H}
+\end{align*}
+
+
+\newpage
+
+\header{Flowchart:}
+
+% \begin{figure}[!htb]
+%     \centering
+%     \begin{tikzpicture}[node distance=2cm]
+%         \node (start) [startstop] {Start};
+%     \end{tikzpicture}
+% \end{figure}
+
+\newpage
+
+\small\texttt{\verbatiminput{code/7_ising.f90}}
+
+\newpage
+
+\header{Output:}
+
+\begin{figure*}[!htb]
+    \centering
+    \includegraphics[width=1.0\linewidth]{diag/ising_mag.png}
+    \caption{Magnetization per spin}
+    \label{fig:placeholder}
+\end{figure*}
+
+\begin{figure*}[!htb]
+    \centering
+    \includegraphics[width=1.0\linewidth]{diag/ising_energy.png}
+    \caption{Energy per spin}
+    \label{fig:placeholder}
+\end{figure*}
+
+\begin{figure*}[!htb]
+    \centering
+    \includegraphics[width=1.0\linewidth]{diag/ising_heatcap.png}
+    \caption{Heat Capacity per spin}
+    \label{fig:placeholder}
+\end{figure*}
+
+\begin{figure*}[!htb]
+    \centering
+    \includegraphics[width=1.0\linewidth]{diag/ising_susc.png}
+    \caption{Magnetic Susceptibility per spin}
+    \label{fig:placeholder}
+\end{figure*}
+
+\vspace{2em}
