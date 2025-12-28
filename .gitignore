@@ -3,8 +3,8 @@
 
 # Executables and data
 *.x
-*.dat
-*.png
+#*.dat
+#*.png
 #*.pdf
 *.eps
 *.svg
